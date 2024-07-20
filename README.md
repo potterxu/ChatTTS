@@ -5,17 +5,24 @@
 # ChatTTS
 A generative speech model for daily dialogue.
 
-[![Licence](https://img.shields.io/badge/LICENSE-CC%20BY--NC%204.0-green.svg?style=for-the-badge)](https://github.com/2noise/ChatTTS/blob/main/LICENSE)
+[![Licence](https://img.shields.io/github/license/2noise/ChatTTS?style=for-the-badge)](https://github.com/2noise/ChatTTS/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/ChatTTS.svg?style=for-the-badge)](https://pypi.org/project/ChatTTS)
 
 [![Huggingface](https://img.shields.io/badge/🤗%20-Models-yellow.svg?style=for-the-badge)](https://huggingface.co/2Noise/ChatTTS)
 [![Open In Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)](https://colab.research.google.com/github/2noise/ChatTTS/blob/main/examples/ipynb/colab.ipynb)
-[![Discord](https://img.shields.io/badge/ChatTTS-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Ud5Jxgx5yD)
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Ud5Jxgx5yD)
 
-**English** | [**简体中文**](docs/cn/README.md) | [**日本語**](docs/jp/README.md) | [**Русский**](docs/ru/README.md) | [**Español**](docs/es/README.md)
+**English** | [**简体中文**](docs/cn/README.md) | [**日本語**](docs/jp/README.md) | [**Русский**](docs/ru/README.md) | [**Español**](docs/es/README.md) | [**Français**](docs/fr/README.md)
 
 </div>
 
 ## Introduction
+> [!Note]
+> This repo contains the algorithm infrastructure and some simple examples.
+
+> [!Tip]
+> For the extended end-user products, please refer to the index repo [Awesome-ChatTTS](https://github.com/libukai/Awesome-ChatTTS/tree/en) maintained by the community.
+
 ChatTTS is a text-to-speech model designed specifically for dialogue scenarios such as LLM assistant.
 
 ### Supported Languages
@@ -31,21 +38,30 @@ ChatTTS is a text-to-speech model designed specifically for dialogue scenarios s
 3. **Better Prosody**: ChatTTS surpasses most of open-source TTS models in terms of prosody. We provide pretrained models to support further research and development.
 
 ### Dataset & Model
+> [!Important]
+> The released model is for academic purposes only.
+
 - The main model is trained with Chinese and English audio data of 100,000+ hours.
 - The open-source version on **[HuggingFace](https://huggingface.co/2Noise/ChatTTS)** is a 40,000 hours pre-trained model without SFT.
 
 ### Roadmap
-- [x] Open-source the 40k hour base model and spk_stats file
-- [ ] Open-source VQ encoder and Lora training code
-- [ ] Streaming audio generation without refining the text*
-- [ ] Open-source the 40k hour version with multi-emotion control
-- [ ] ChatTTS.cpp maybe? (PR or new repo are welcomed.)
+- [x] Open-source the 40k-hours-base model and spk_stats file.
+- [x] Streaming audio generation.
+- [x] Open-source DVAE encoder and zero shot inferring code.
+- [ ] Multi-emotion controlling.
+- [ ] ChatTTS.cpp (new repo in `2noise` org is welcomed)
+
+### Licenses
+
+#### The Code
+
+The code is published under `AGPLv3+` license.
+
+#### The model
+
+The model is published under `CC BY-NC 4.0` license. It is intended for educational and research use, and should not be used for any commercial or illegal purposes. The authors do not guarantee the accuracy, completeness, or reliability of the information. The information and data used in this repo, are for academic and research purposes only. The data obtained from publicly available sources, and the authors do not claim any ownership or copyright over the data.
 
 ### Disclaimer
-> [!Important]
-> This repo is for academic purposes only.
-
-It is intended for educational and research use, and should not be used for any commercial or legal purposes. The authors do not guarantee the accuracy, completeness, or reliability of the information. The information and data used in this repo, are for academic and research purposes only. The data obtained from publicly available sources, and the authors do not claim any ownership or copyright over the data.
 
 ChatTTS is a powerful text-to-speech system. However, it is very important to utilize this technology responsibly and ethically. To limit the use of ChatTTS, we added a small amount of high-frequency noise during the training of the 40,000-hour model, and compressed the audio quality as much as possible using MP3 format, to prevent malicious actors from potentially using it for criminal purposes. At the same time, we have internally trained a detection model and plan to open-source it in the future.
 
@@ -57,20 +73,13 @@ For formal inquiries about the model and roadmap, please contact us at **open-so
 
 #### Online Chat
 ##### 1. QQ Group (Chinese Social APP)
-- **Group 1**, 808364215 (Full)
-- **Group 2**, 230696694 (Full)
-- **Group 3**, 933639842 (Full)
+- **Group 1**, 808364215
+- **Group 2**, 230696694
+- **Group 3**, 933639842
 - **Group 4**, 608667975
 
 ##### 2. Discord Server
 Join by clicking [here](https://discord.gg/Ud5Jxgx5yD).
-
-## Installation (WIP)
-> Will be uploaded to pypi soon according to https://github.com/2noise/ChatTTS/issues/269
-
-```bash
-pip install git+https://github.com/2noise/ChatTTS
-```
 
 ## Get Started
 ### Clone Repo
@@ -92,6 +101,30 @@ conda activate chattts
 pip install -r requirements.txt
 ```
 
+#### Optional: Install TransformerEngine if using NVIDIA GPU (Linux only)
+> [!Note]
+> The installation process is very slow.
+
+> [!Warning]
+> The adaptation of TransformerEngine is currently under development and CANNOT run properly now. 
+> Only install it on developing purpose.
+
+```bash
+pip install git+https://github.com/NVIDIA/TransformerEngine.git@stable
+```
+
+#### Optional: Install FlashAttention-2 (mainly NVIDIA GPU)
+> [!Note]
+> See supported devices at the [Hugging Face Doc](https://huggingface.co/docs/transformers/perf_infer_gpu_one#flashattention-2).
+
+> [!Warning]
+> Currently the FlashAttention-2 will slow down the generating speed according to [this issue](https://github.com/huggingface/transformers/issues/26990). 
+> Only install it on developing purpose.
+
+```bash
+pip install flash-attn --no-build-isolation
+```
+
 ### Quick Start
 > Make sure you are under the project root directory when you execute these commands below.
 
@@ -107,7 +140,24 @@ python examples/web/webui.py
 python examples/cmd/run.py "Your text 1." "Your text 2."
 ```
 
-### Basic
+## Installation
+
+1. Install the stable version from PyPI
+```bash
+pip install ChatTTS
+```
+
+2. Install the latest version from GitHub
+```bash
+pip install git+https://github.com/2noise/ChatTTS
+```
+
+3. Install from local directory in dev mode
+```bash
+pip install -e .
+```
+
+### Basic Usage
 
 ```python
 import ChatTTS
@@ -121,10 +171,11 @@ texts = ["PUT YOUR 1st TEXT HERE", "PUT YOUR 2nd TEXT HERE"]
 
 wavs = chat.infer(texts)
 
-torchaudio.save("output1.wav", torch.from_numpy(wavs[0]), 24000)
+for i in range(len(wavs)):
+    torchaudio.save(f"basic_output{i}.wav", torch.from_numpy(wavs[i]).unsqueeze(0), 24000)
 ```
 
-### Advanced
+### Advanced Usage
 
 ```python
 ###################################
@@ -160,7 +211,7 @@ wavs = chat.infer(
 
 text = 'What is [uv_break]your favorite english food?[laugh][lbreak]'
 wavs = chat.infer(text, skip_refine_text=True, params_refine_text=params_refine_text,  params_infer_code=params_infer_code)
-torchaudio.save("output2.wav", torch.from_numpy(wavs[0]), 24000)
+torchaudio.save("word_level_output.wav", torch.from_numpy(wavs[0]).unsqueeze(0), 24000)
 ```
 
 <details open>
@@ -170,8 +221,8 @@ torchaudio.save("output2.wav", torch.from_numpy(wavs[0]), 24000)
 inputs_en = """
 chat T T S is a text to speech model designed for dialogue applications. 
 [uv_break]it supports mixed language input [uv_break]and offers multi speaker 
-capabilities with precise control over prosodic elements [laugh]like like 
-[uv_break]laughter[laugh], [uv_break]pauses, [uv_break]and intonation. 
+capabilities with precise control over prosodic elements like 
+[uv_break]laughter[uv_break][laugh], [uv_break]pauses, [uv_break]and intonation. 
 [uv_break]it delivers natural and expressive speech,[uv_break]so please
 [uv_break] use the project responsibly at your own risk.[uv_break]
 """.replace('\n', '') # English is still experimental.
@@ -181,7 +232,7 @@ params_refine_text = ChatTTS.Chat.RefineTextParams(
 )
 
 audio_array_en = chat.infer(inputs_en, params_refine_text=params_refine_text)
-torchaudio.save("output3.wav", torch.from_numpy(audio_array_en[0]), 24000)
+torchaudio.save("self_introduction_output.wav", torch.from_numpy(audio_array_en[0]), 24000)
 ```
 
 <table>
@@ -234,9 +285,6 @@ In the current released model, the only token-level control units are `[laugh]`,
 
 ## Special Appreciation
 - [wlu-audio lab](https://audio.westlake.edu.cn/) for early algorithm experiments.
-
-## Related Resources
-- [Awesome-ChatTTS](https://github.com/libukai/Awesome-ChatTTS)
 
 ## Thanks to all contributors for their efforts
 [![contributors](https://contrib.rocks/image?repo=2noise/ChatTTS)](https://github.com/2noise/ChatTTS/graphs/contributors)

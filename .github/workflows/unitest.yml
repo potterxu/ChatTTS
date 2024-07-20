@@ -3,6 +3,9 @@ on: [ push, pull_request ]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+
+    if: "!contains(github.event.head_commit.message, 'chore(format): ') && !contains(github.event.head_commit.message, 'chore(env): ')"
+
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
@@ -11,12 +14,16 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependents
+        run: |
+          sudo apt-get install -y portaudio19-dev python3-pyaudio
 
       - name: Test Install
         run: pip install .
@@ -25,5 +32,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Test
-        run: |
-          echo "TODO"
+        run: tests/testall.sh
